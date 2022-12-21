@@ -3,7 +3,7 @@ from PIL import Image, ImageFont, ImageDraw
 outfile = "Reeds Weekly Logo - 2022-12-19.jpg"
 
 # Image for the background
-my_image = Image.open("Reeds Weekly Logo.jpg")
+my_image = Image.open("/images/Reeds Weekly Logo.jpg")
 
 # Font used.
 title_font = ImageFont.truetype('Roboto_Condensed/RobotoCondensed-Bold.ttf', 84)
