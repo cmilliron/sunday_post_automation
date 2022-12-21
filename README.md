@@ -1,2 +1,2 @@
-# sunday_post_automation
-Automates my churhc post
+# Church Sunday Post Automation 
+Automates my church post
