@@ -2,13 +2,18 @@ from PIL import Image, ImageFont, ImageDraw
 from bs4 import BeautifulSoup
 import requests
 import json
+from pytube import YouTube
 import pprint
 
 
 HEADERS = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36"
-WORDPRESS_SERMON = """[column width="1/1" last="true" title="<Title>" title_type="single" implicit="true"]
+WORDPRESS_SERMON = """<LONG_TITLE>
 
-[iframe src="https://youtube.com/embed/<YouTube>" width="100%" height="600px"]
+<ALT_TEXT>
+
+[column width="1/1" last="true" title="<TITLE>" title_type="single" implicit="true"]
+
+[iframe src="<YOUTUBE_EMBED>" width="100%" height="600px"]
 
 [/iframe]
 
@@ -16,13 +21,13 @@ WORDPRESS_SERMON = """[column width="1/1" last="true" title="<Title>" title_type
 
 [column parallax_bg="disabled" parallax_bg_inertia="-0.2" extended="" extended_padding="1" background_color="" background_image="" background_repeat="" background_position="" background_size="auto" background_attachment="" hide_bg_lowres="" background_video="" vertical_padding_top="0" vertical_padding_bottom="0" more_link="" more_text="" left_border="transparent" class="" id="" title="" title_type="single" animation="none" width="1/1" last="true"]
 
-[column_1 width="1/1" last="true" title="<Title>" title_type="single" animation="none" implicit="true"]
+[column_1 width="1/1" last="true" title='<TITLE>' title_type="single" animation="none" implicit="true"]
 
-<SermonTag>
+<SERMON_TAG>
 
-<strong>Sermon</strong>: "<a href="https://youtu.be/<YouTube>"><Title></a>"
+<strong>Sermon</strong>: "<a href="<YOUTUBE_LINK>"><TITLE></a>"
 
-<strong>Scripture</strong>: <a href="<Bible_link>"><Bible_verse></a>
+<strong>Scripture</strong>: <a href="<BIBLE_LINK>"><BIBLE_VERSE></a>
 
 <strong>Prayer Concerns</strong> - Email your prayer concerns to <a href="mailto:whall@wnccumc.net">Rev Wesley Hall</a>
 
@@ -54,9 +59,23 @@ weekly_info = {
     'tag_date': "2022-12-25",
     'sermon_title': "Merry F'ing Christmas",
     'youtube_tag': "liyu09s7",
+    'w_vidoes': [{
+        'v_title': 'Lo, He Comes With Clouds Descending - YouTube',
+        'v_link': 'https://www.youtube.com/watch?v=suz0cQbjwm0'},
+        {'v_title': 'I Want to be Ready - YouTube',
+        'v_link': 'https://www.youtube.com/watch?v=iyW0x1JC3sc'}
+    ]
 }
 
-wordpress_base = WORDPRESS_SERMON
+
+def download(link):
+    yt = YouTube(link)
+    yt_stream = yt.streams.get_highest_resolution()
+    try:
+        yt_stream.download(output_path="output/")
+    except:
+        print("There has been an error in downloading your youtube video")
+    print("This download has completed! Yahooooo!")
 
 
 def text_to_image(file_date, formal_date, title):
@@ -109,8 +128,18 @@ def get_verses(url):
     return verse_text
 
 
-def wordpress_text(text):
-    pass
+def wordpress_post(info, template):
+    working_text = template
+    working_text = working_text.replace('<TITLE>', info['title_short'])
+    working_text = working_text.replace('<ALT_TEXT>', info['alt_text'])
+    working_text = working_text.replace('<LONG_TITLE>', info['title_long'])
+    working_text = working_text.replace('<YOUTUBE_EMBED>', info['youtube_embed'])
+    working_text = working_text.replace('<SERMON_TAG>', info['sermon_tag'])
+    working_text = working_text.replace('<YOUTUBE_LINK>', info['youtube_link'])
+    working_text = working_text.replace('<BIBLE_LINK>', info['sermon_verse'][1])
+    working_text = working_text.replace('<BIBLE_VERSE>', info['sermon_verse'][0])
+    with open(f'output/Wordpress {info["date_tag"]}', 'w') as file:
+        file.write(working_text)
 
 
 def youtube_text():
@@ -136,8 +165,11 @@ def get_community_matters():
 
 def consolidate_info(info):
     output_text = {}
-    output_text['title'] = f'"{info["sermon_title"]}" - Worship for {info["proper_date"]}'
+    output_text['title_short'] = f'{info["sermon_title"]}'
+    output_text['title_long'] = f'"{info["sermon_title"]}" - Worship for {info["proper_date"]}'
     output_text['event_title'] = f'Worship for {info["proper_date"]} - "{info["sermon_title"]}"'
+    output_text['date_proper'] = info["proper_date"]
+    output_text['date_tag'] = info["tag_date"]
     output_text['sermon_tag'] = f'Join Rev Wesley Hall as he brings a sermon from {info["sermon_verse"]}.'
     output_text['alt_text'] = f'Reeds UMC logo with sermon title, "{info["sermon_title"]}" with the date, "{info["proper_date"]}." \n'
     output_text['youtube_link'] = f'https://youtu.be/{info["youtube_tag"]}'
@@ -150,37 +182,30 @@ def consolidate_info(info):
     return output_text
 
 
-# opening_verse_content = get_verse_info(weekly_info["opening_verse"])
-# sermon_verse_content = get_verse_info(weekly_info["sermon_verse"])
-
-"""
-sermon_title = input("What is the sermon title? ")
-sunday_date = input("What is the date of the Sunday? ")
-youtube_tag = input("What is the YouTube link for Sunday? ")
-"""
-
-text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper_date'], title=weekly_info['sermon_title'])
+def get_user_input():
+    sermon_title = input("What is the sermon title? ")
+    sunday_date = input("What is the date of the Sunday? ")
+    youtube_tag = input("What is the YouTube link for Sunday? ")
 
 
-all_content = consolidate_info(weekly_info)
-with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
-    worship_content.write(json.dumps(all_content, indent=2))
+def get_wp_template():
+    with open("wordpress_template.txt") as file:
+        text = file.read()
+    return text
+
+
+if __name__ == "__main__":
+    all_content = consolidate_info(weekly_info)
+    wordpress_post(all_content, WORDPRESS_SERMON)
+    #text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper_date'],
+    #              title=weekly_info['sermon_title'])
+    #with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
+    #    worship_content.write(json.dumps(all_content, indent=2))
+    # for video in weekly_info['w_vidoes']:
+    #    print(f'Trying to download {video["v_title"]}')
+    #    download(video["v_link"])
 
 """output_text['alt_text'] = "Community Matters \n\n"
 for i in community_matters:
     general_text += i + "\n" + '<div style="text-align: center; padding-top:10px">********************************************************************************</div>' + "\n"
 """
-
-"""
-Commented out for testing.
-add_title = wordpress_base.replace('<Title>', sermon_title)
-add_youtube = add_title.replace("<YouTube>", youtube_tag)
-add_bverse = add_youtube.replace("<Bible_verse>", sermon_verse)
-add_verse_link = add_bverse.replace("<Bible_link>", sermon_verse_link)
-final_wordpress = add_verse_link.replace("<SermonTag>", sermon_tag)
-"""
-
-"""
-print(general_text)
-print()
-print(final_wordpress)"""
