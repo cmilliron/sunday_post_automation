@@ -46,6 +46,7 @@ Songs are done under CCLI Streaming License.
 
 [/column]
  """
+
 weekly_info = {
     'opening_verse': "Isaiah 7:10-16",
     'sermon_verse': "Matthew 1:18-25",
@@ -59,13 +60,13 @@ wordpress_base = WORDPRESS_SERMON
 
 
 def text_to_image(file_date, formal_date, title):
-    outfile = f"Reeds Weekly Logo - {file_date}.jpg"
+    outfile = f"output/Reeds Weekly Logo - {file_date}.jpg"
 
     # Image for the background
-    my_image = Image.open("Reeds Weekly Logo.jpg")
+    my_image = Image.open("resources/images/Reeds Weekly Logo.jpg")
 
     # Font used.
-    title_font = ImageFont.truetype('Roboto_Condensed/RobotoCondensed-Bold.ttf', 84)
+    title_font = ImageFont.truetype('resources/font/Roboto_Condensed/RobotoCondensed-Bold.ttf', 84)
 
     first_text = title
     second_text = f"Worship for {formal_date}"
@@ -117,9 +118,7 @@ def youtube_text():
 
 
 def get_verse_info(location):
-    verse = location
-    verse.append(get_verse_link(location))
-    verse.append(input(f"What is the content of verse {location}?" ))
+    verse = [location, get_verse_link(location), input(f"What is the content of verse {location}? ")]
     return verse
 
 
@@ -143,9 +142,9 @@ def consolidate_info(info):
     output_text['alt_text'] = f'Reeds UMC logo with sermon title, "{info["sermon_title"]}" with the date, "{info["proper_date"]}." \n'
     output_text['youtube_link'] = f'https://youtu.be/{info["youtube_tag"]}'
     output_text['youtube_embed'] = f'https://youtube.com/embed/{info["youtube_tag"]}'
-    output_text['opening_verse'] = get_verse_info(info["opening_verse"]) # opening_verse_content
+    output_text['opening_verse'] = get_verse_info(info["opening_verse"])
     # f'Opening Verse - {opening_verse} - {opening_verse_link} \n\n {opening_verse_text} \n' + "*" * 20 + '\n'
-    output_text['sermon_verse'] = get_verse_info(info["sermon_verse"]) #sermon_verse_content
+    output_text['sermon_verse'] = get_verse_info(info["sermon_verse"])
     # f'Sermon Verse - {sermon_verse} - {sermon_verse_link} \n\n {sermon_verse_text} \n' + "*" * 20 + '\n'
     output_text["c_matters"] = get_community_matters()
     return output_text
@@ -164,7 +163,7 @@ text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper
 
 
 all_content = consolidate_info(weekly_info)
-with open(f'Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
+with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
     worship_content.write(json.dumps(all_content, indent=2))
 
 """output_text['alt_text'] = "Community Matters \n\n"
