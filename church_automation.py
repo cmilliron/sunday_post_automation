@@ -77,7 +77,6 @@ def text_to_image(file_date, formal_date, title):
 
 
 def get_verse_link(v):
-    # https://www.biblegateway.com/passage/?search=Matthew+6%3A11-16&version=NRSV
     y = v.replace(" ", "+")
     z = y.replace(":", "%3A")
     v_link = f"https://www.biblegateway.com/passage/?search={z}&version=NRSVUE"
@@ -118,9 +117,9 @@ def youtube_text():
 
 
 def get_verse_info(location):
-    verse = [location]
+    verse = location
     verse.append(get_verse_link(location))
-    verse.append(input(f"What is the content of verse {location}?"))
+    verse.append(input(f"What is the content of verse {location}?" ))
     return verse
 
 
