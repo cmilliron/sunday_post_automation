@@ -1,0 +1,37 @@
+[column width="1/1" last="true" title="Title" title_type="single" implicit="true"]
+
+[iframe src="https://youtube.com/embed/YouTube" width="100%" height="600px"]
+
+[/iframe]
+
+[/column]
+
+[column parallax_bg="disabled" parallax_bg_inertia="-0.2" extended="" extended_padding="1" background_color="" background_image="" background_repeat="" background_position="" background_size="auto" background_attachment="" hide_bg_lowres="" background_video="" vertical_padding_top="0" vertical_padding_bottom="0" more_link="" more_text="" left_border="transparent" class="" id="" title="" title_type="single" animation="none" width="1/1" last="true"]
+
+[column_1 width="1/1" last="true" title="Title" title_type="single" animation="none" implicit="true"]
+
+<strong>Sermon</strong>: "<a href="https://youtu.be/YouTube">Title</a>"
+
+<strong>Scripture</strong>: <a href="Bible_link">Bible verse</a>
+
+<strong>Prayer Concerns</strong> - Email your prayer concerns to <a href="mailto:whall@wnccumc.net">Rev Wesley Hall</a>
+
+Keep up with everything going on at our church by subscribing to our newsletter. <a href="http://eepurl.com/cRUaer">Click here</a>.
+
+Songs are done under CCLI Streaming License.
+
+[/column_1]
+
+[divider type="1"]
+
+[/divider]
+
+[column_1 width="1/5" last="true" title="undefined" title_type="undefined" animation="none" implicit="true"]
+
+[team_member name="Wesley Hall" position="Senior Pastor" url="/" email="whall@wnccumc.net" phone="" picture="https://reedsumc.org/wp-content/uploads/2021/07/wesleyhall.jpg" googleplus="/" linkedin="" facebook="/" twitter="/" youtube="/" instagram="/" dribble="/" vimeo="/"]
+
+[/team_member]
+
+[/column_1]
+
+[/column]
