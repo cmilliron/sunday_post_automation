@@ -7,50 +7,8 @@ import pprint
 
 
 HEADERS = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36"
-WORDPRESS_SERMON = """<LONG_TITLE>
-
-<ALT_TEXT>
-
-[column width="1/1" last="true" title="<TITLE>" title_type="single" implicit="true"]
-
-[iframe src="<YOUTUBE_EMBED>" width="100%" height="600px"]
-
-[/iframe]
-
-[/column]
-
-[column parallax_bg="disabled" parallax_bg_inertia="-0.2" extended="" extended_padding="1" background_color="" background_image="" background_repeat="" background_position="" background_size="auto" background_attachment="" hide_bg_lowres="" background_video="" vertical_padding_top="0" vertical_padding_bottom="0" more_link="" more_text="" left_border="transparent" class="" id="" title="" title_type="single" animation="none" width="1/1" last="true"]
-
-[column_1 width="1/1" last="true" title='<TITLE>' title_type="single" animation="none" implicit="true"]
-
-<SERMON_TAG>
-
-<strong>Sermon</strong>: "<a href="<YOUTUBE_LINK>"><TITLE></a>"
-
-<strong>Scripture</strong>: <a href="<BIBLE_LINK>"><BIBLE_VERSE></a>
-
-<strong>Prayer Concerns</strong> - Email your prayer concerns to <a href="mailto:whall@wnccumc.net">Rev Wesley Hall</a>
-
-Keep up with everything going on at our church by subscribing to our newsletter. <a href="http://eepurl.com/cRUaer">Click here</a>.
-
-Songs are done under CCLI Streaming License.
-
-[/column_1]
-
-[divider type="1"]
-
-[/divider]
-
-[column_1 width="1/5" last="true" title="undefined" title_type="undefined" animation="none" implicit="true"]
-
-[team_member name="Wesley Hall" position="Senior Pastor" url="/" email="whall@wnccumc.net" phone="" picture="https://reedsumc.org/wp-content/uploads/2021/07/wesleyhall.jpg" googleplus="/" linkedin="" facebook="/" twitter="/" youtube="/" instagram="/" dribble="/" vimeo="/"]
-
-[/team_member]
-
-[/column_1]
-
-[/column]
- """
+WP_TEMPLATE = "wordpress_template.txt"
+YT_POST = "youtube_template.txt"
 
 weekly_info = {
     'opening_verse': "Isaiah 7:10-16",
@@ -59,7 +17,7 @@ weekly_info = {
     'tag_date': "2022-12-25",
     'sermon_title': "Merry F'ing Christmas",
     'youtube_tag': "liyu09s7",
-    'w_vidoes': [{
+    'w_videos': [{
         'v_title': 'Lo, He Comes With Clouds Descending - YouTube',
         'v_link': 'https://www.youtube.com/watch?v=suz0cQbjwm0'},
         {'v_title': 'I Want to be Ready - YouTube',
@@ -128,6 +86,7 @@ def get_verses(url):
     return verse_text
 
 
+
 def wordpress_post(info, template):
     working_text = template
     working_text = working_text.replace('<TITLE>', info['title_short'])
@@ -142,9 +101,16 @@ def wordpress_post(info, template):
         file.write(working_text)
 
 
-def youtube_text():
-    pass
-
+def youtube_text(info, template):
+    working_text = template
+    working_text = working_text.replace('<SERMON_TAG>', info['sermon_tag'])
+    vid_credit = ""
+    for v in info["w_videos"]:
+        vid_credit = vid_credit + " - ".join(v.values()) + "\n"
+    working_text = working_text.replace('<YT_TAG>', vid_credit)
+    # return working_text
+    with open(f'output/Youtube {info["date_tag"]}', 'w') as file:
+        file.write(working_text)
 
 def get_verse_info(location):
     verse = [location, get_verse_link(location), input(f"What is the content of verse {location}? ")]
@@ -179,6 +145,7 @@ def consolidate_info(info):
     output_text['sermon_verse'] = get_verse_info(info["sermon_verse"])
     # f'Sermon Verse - {sermon_verse} - {sermon_verse_link} \n\n {sermon_verse_text} \n' + "*" * 20 + '\n'
     output_text["c_matters"] = get_community_matters()
+    output_text['w_videos'] = info['w_videos']
     return output_text
 
 
@@ -188,15 +155,16 @@ def get_user_input():
     youtube_tag = input("What is the YouTube link for Sunday? ")
 
 
-def get_wp_template():
-    with open("wordpress_template.txt") as file:
+def get_template(template):
+    with open(f"Resources/{template}") as file:
         text = file.read()
     return text
 
 
 if __name__ == "__main__":
     all_content = consolidate_info(weekly_info)
-    wordpress_post(all_content, WORDPRESS_SERMON)
+    wordpress_post(all_content, get_template(WP_TEMPLATE))
+    youtube_text(all_content, get_template(YT_POST))
     #text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper_date'],
     #              title=weekly_info['sermon_title'])
     #with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:

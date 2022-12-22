@@ -1,4 +1,4 @@
-"""<LONG_TITLE>
+<LONG_TITLE>
 
 <ALT_TEXT>
 
@@ -41,4 +41,3 @@ Songs are done under CCLI Streaming License.
 [/column_1]
 
 [/column]
- """
