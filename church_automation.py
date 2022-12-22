@@ -44,11 +44,9 @@ def text_to_image(file_date, formal_date, title):
 
     # Font used.
     title_font = ImageFont.truetype('resources/font/Roboto_Condensed/RobotoCondensed-Bold.ttf', 84)
-
     first_text = title
     second_text = f"Worship for {formal_date}"
     image_editable = ImageDraw.Draw(my_image)
-
     image_editable.text((960, 920), first_text, font=title_font, align='center', fill="white", anchor='ms')
     image_editable.text((960, 1020), second_text, font=title_font, align='center', fill="white", anchor='ms')
     my_image.save(outfile, "JPEG")
@@ -86,6 +84,10 @@ def get_verses(url):
     return verse_text
 
 
+def make_file(content, location):
+    with open(f'output/{location}', 'w') as file:
+        file.write(content)
+
 
 def wordpress_post(info, template):
     working_text = template
@@ -97,8 +99,7 @@ def wordpress_post(info, template):
     working_text = working_text.replace('<YOUTUBE_LINK>', info['youtube_link'])
     working_text = working_text.replace('<BIBLE_LINK>', info['sermon_verse'][1])
     working_text = working_text.replace('<BIBLE_VERSE>', info['sermon_verse'][0])
-    with open(f'output/Wordpress {info["date_tag"]}', 'w') as file:
-        file.write(working_text)
+    make_file(working_text, f'wordpress_{info["date_tag"]}')
 
 
 def youtube_text(info, template):
@@ -108,9 +109,8 @@ def youtube_text(info, template):
     for v in info["w_videos"]:
         vid_credit = vid_credit + " - ".join(v.values()) + "\n"
     working_text = working_text.replace('<YT_TAG>', vid_credit)
-    # return working_text
-    with open(f'output/Youtube {info["date_tag"]}', 'w') as file:
-        file.write(working_text)
+    make_file(working_text, f'youtube_{info["date_tag"]}')
+
 
 def get_verse_info(location):
     verse = [location, get_verse_link(location), input(f"What is the content of verse {location}? ")]
@@ -141,9 +141,7 @@ def consolidate_info(info):
     output_text['youtube_link'] = f'https://youtu.be/{info["youtube_tag"]}'
     output_text['youtube_embed'] = f'https://youtube.com/embed/{info["youtube_tag"]}'
     output_text['opening_verse'] = get_verse_info(info["opening_verse"])
-    # f'Opening Verse - {opening_verse} - {opening_verse_link} \n\n {opening_verse_text} \n' + "*" * 20 + '\n'
     output_text['sermon_verse'] = get_verse_info(info["sermon_verse"])
-    # f'Sermon Verse - {sermon_verse} - {sermon_verse_link} \n\n {sermon_verse_text} \n' + "*" * 20 + '\n'
     output_text["c_matters"] = get_community_matters()
     output_text['w_videos'] = info['w_videos']
     return output_text
