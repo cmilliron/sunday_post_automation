@@ -2,6 +2,10 @@
 
 <ALT_TEXT>
 
+<SERMON_TAG>
+
+<YOUTUBE_LINK>">
+
 [column width="1/1" last="true" title="<TITLE>" title_type="single" implicit="true"]
 
 [iframe src="<YOUTUBE_EMBED>" width="100%" height="600px"]

@@ -11,17 +11,17 @@ WP_TEMPLATE = "wordpress_template.txt"
 YT_POST = "youtube_template.txt"
 
 weekly_info = {
-    'opening_verse': "Isaiah 7:10-16",
-    'sermon_verse': "Matthew 1:18-25",
-    'proper_date': "December 25, 2022",
-    'tag_date': "2022-12-25",
-    'sermon_title': "Merry F'ing Christmas",
-    'youtube_tag': "liyu09s7",
+    'opening_verse': "Psalm 27",
+    'sermon_verse': "Luke 5:27-39",
+    'proper_date': "January 22, 2023",
+    'tag_date': "2023-01-22",
+    'sermon_title': "The Parrot, Levi, and Us: Conversion and Repentance…",
+    'youtube_tag': "2fOaI7PPt44",
     'w_videos': [{
-        'v_title': 'Lo, He Comes With Clouds Descending - YouTube',
-        'v_link': 'https://www.youtube.com/watch?v=suz0cQbjwm0'},
-        {'v_title': 'I Want to be Ready - YouTube',
-        'v_link': 'https://www.youtube.com/watch?v=iyW0x1JC3sc'}
+        'v_title': 'All the Way My Saviour Leads Me - YouTube',
+        'v_link': 'https://www.youtube.com/watch?v=ekUELQCnQlM'},
+        {'v_title': 'Just As I Am - Hymn #357 - YouTube',
+        'v_link': 'https://www.youtube.com/watch?v=urZcSkbgQlM'}
     ]
 }
 
@@ -85,7 +85,7 @@ def get_verses(url):
 
 
 def make_file(content, location):
-    with open(f'output/{location}', 'w') as file:
+    with open(f'output/{location}.txt', 'w') as file:
         file.write(content)
 
 
@@ -163,13 +163,13 @@ if __name__ == "__main__":
     all_content = consolidate_info(weekly_info)
     wordpress_post(all_content, get_template(WP_TEMPLATE))
     youtube_text(all_content, get_template(YT_POST))
-    #text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper_date'],
-    #              title=weekly_info['sermon_title'])
-    #with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
-    #    worship_content.write(json.dumps(all_content, indent=2))
-    # for video in weekly_info['w_vidoes']:
-    #    print(f'Trying to download {video["v_title"]}')
-    #    download(video["v_link"])
+    text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper_date'],
+                  title=weekly_info['sermon_title'])
+    with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
+        worship_content.write(json.dumps(all_content, indent=2))
+    for video in weekly_info['w_videos']:
+        print(f'Trying to download {video["v_title"]}')
+        download(video["v_link"])
 
 """output_text['alt_text'] = "Community Matters \n\n"
 for i in community_matters:
