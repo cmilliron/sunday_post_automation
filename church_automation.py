@@ -11,17 +11,15 @@ WP_TEMPLATE = "wordpress_template.txt"
 YT_POST = "youtube_template.txt"
 
 weekly_info = {
-    'opening_verse': "Psalm 27",
-    'sermon_verse': "Luke 5:27-39",
-    'proper_date': "January 22, 2023",
-    'tag_date': "2023-01-22",
-    'sermon_title': "The Parrot, Levi, and Us: Conversion and Repentance…",
-    'youtube_tag': "2fOaI7PPt44",
+    'opening_verse': "John 17:20-21",
+    'sermon_verse': "I Corinthians 1:10-18",
+    'proper_date': "January 29, 2023",
+    'tag_date': "2023-01-29",
+    'sermon_title': "United in Christ…",
+    'youtube_tag': "L9xaMU2xeDE",
     'w_videos': [{
-        'v_title': 'All the Way My Saviour Leads Me - YouTube',
-        'v_link': 'https://www.youtube.com/watch?v=ekUELQCnQlM'},
-        {'v_title': 'Just As I Am - Hymn #357 - YouTube',
-        'v_link': 'https://www.youtube.com/watch?v=urZcSkbgQlM'}
+        'v_title': 'Lift High the Cross - YouTube',
+        'v_link': 'https://www.youtube.com/watch?v=GbcBXYP4AlE'}
     ]
 }
 
@@ -84,7 +82,7 @@ def get_verses(url):
     return verse_text
 
 
-def make_file(content, location):
+def make_file(content: object, location: object) -> object:
     with open(f'output/{location}.txt', 'w') as file:
         file.write(content)
 
@@ -113,7 +111,9 @@ def youtube_text(info, template):
 
 
 def get_verse_info(location):
-    verse = [location, get_verse_link(location), input(f"What is the content of verse {location}? ")]
+    # verse = [location, get_verse_link(location), input(f"What is the content of verse {location}? ")]
+    verse = [location, get_verse_link(location), get_verse_content(location)]
+
     return verse
 
 
@@ -157,6 +157,32 @@ def get_template(template):
     with open(f"Resources/{template}") as file:
         text = file.read()
     return text
+
+
+def get_verse_content(v):
+    BIBLE_URL = "http://bible.oremus.org/"
+    san_v = v.replace(":", ".")
+    inquiry = {
+        "passage": san_v,
+        "version": "NRSV",
+        "vnum": "NO"
+    }
+
+    response = requests.get(url=BIBLE_URL, params=inquiry)
+    soup = BeautifulSoup(response.content, "html.parser")
+    passage = soup.find("div", {"class": "bibletext"})
+    verses = passage.find("p")
+    for v in verses("sup"):
+        v.decompose()
+        # verses_final.append(v)
+    verses_final = verses.text.splitlines()[1:]
+    # print(verses_final)
+    openlp = f"{inquiry['passage']}"
+    for v in verses_final:
+        if len(v) > 0:
+            openlp = openlp + "\n[===]\n" + v
+    make_file(openlp, san_v)
+    return openlp
 
 
 if __name__ == "__main__":
