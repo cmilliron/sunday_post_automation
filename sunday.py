@@ -15,6 +15,7 @@ class Sunday:
         self.verse_data = []
         self.community_matters = []
         self.yt_videos = []
+        self.tags = {}
 
     @staticmethod
     def get_bg_link(verse):
@@ -22,6 +23,26 @@ class Sunday:
         z = y.replace(":", "%3A")
         v_link = f"https://www.biblegateway.com/passage/?search={z}&version=NRSVUE"
         return v_link
+
+    def create_tags(self):
+        self.tags['title_short'] = f'{self.sermon_title}'
+        self.tags['title_long'] = f'"{self.sermon_title}" - Worship for {self.date}'
+        self.tags['event_title'] = f'Worship for {self.date} - "{self.sermon_title}"'
+        self.tags['date_proper'] = self.date
+        self.tags['date_tag'] = self.other_date
+        self.tags['sermon_tag'] = f'Join Rev Wesley Hall as he brings a sermon from {self.verses[0]}.'
+        self.tags[
+            'alt_text'] = f'Reeds UMC logo with sermon title, "{self.sermon_title}" with the date, "{self.date}." \n'
+        self.tags['youtube_link'] = f'https://youtu.be/{self.yt_link}'
+        self.tags['youtube_embed'] = f'https://youtube.com/embed/{self.yt_link}'
+        self.tags["sermon_verse"] = self.verse_data[0]['verse_formal']
+        self.tags["sermon_verse_link"] = self.verse_data[0]["bg_link"]
+        """
+        self.tags['opening_verse'] = get_verse_info(info["opening_verse"])
+        self.tags['sermon_verse'] = get_verse_info(info["sermon_verse"])
+        self.tags["c_matters"] = get_community_matters()
+        self.tags['w_videos'] = info['w_videos']
+"""
 
     def get_verse_info(self):
         if len(self.verses) == 0:

@@ -2,6 +2,8 @@
 
 <ALT_TEXT>
 
+<EVENT_TITLE>
+
 <SERMON_TAG>
 
 <YOUTUBE_LINK>">
