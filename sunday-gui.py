@@ -194,6 +194,10 @@ def add_sermon_title():
     sermon_title.insert(0, "Success!")
 
 
+def exit_program():
+    window.destroy()
+
+
 def process_data():
     """sunday_info.get_verse_info()
     sunday_info.create_tags()
@@ -332,7 +336,7 @@ if __name__ == "__main__":
     other_date.insert(0, "2023-xx-xx")
 
     other_date_button = tk.Button(text="Add", width=18, command=add_other_date)
-    other_date_button.grid(row=6, column=2)  # columnspan=2)
+    other_date_button.grid(row=6, column=2)
 
     # ---------------------Sunday Date for files------------------------------#
 
@@ -351,14 +355,14 @@ if __name__ == "__main__":
     com_matters_title_label = tk.Label(text='Matters Title:')
     com_matters_title_label.grid(row=8, column=0, sticky="E")
 
-    matter_title = tk.Entry(width=35)
+    matter_title = tk.Entry(width=35, borderwidth=1, relief="solid")
     matter_title.grid(row=8, column=1, sticky="W")
     matter_title.insert(0, "Title")
 
     com_matters_label = tk.Label(text='Community Matters:')
     com_matters_label.grid(row=9, column=0, sticky="E")
 
-    matter = tk.Entry(width=35)
+    matter = tk.Entry(width=35, borderwidth=1, relief="solid")
     matter.grid(row=9, column=1, sticky="W")
     matter.insert(0, "Community Matters")
 
@@ -367,8 +371,11 @@ if __name__ == "__main__":
 
     # --------------------Process Button-----------------------------------#
 
-    add_button = tk.Button(text="Process", width=36, command=process_data)
-    add_button.grid(row=10, column=1, columnspan=2)
+    process_button = tk.Button(text="Process", width=36, command=process_data)
+    process_button.grid(row=10, column=1)
+
+    exit_button = tk.Button(text="Exit", width=18, background="blue", command=exit_program)
+    exit_button.grid(row=10, column=2)
 
     # --------------------Main Loop Call-----------------------------------#
 
