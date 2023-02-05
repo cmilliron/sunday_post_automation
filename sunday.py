@@ -42,7 +42,7 @@ class Sunday:
         self.tags['sermon_verse'] = get_verse_info(info["sermon_verse"])
         self.tags["c_matters"] = get_community_matters()
         self.tags['w_videos'] = info['w_videos']
-"""
+        """
 
     def get_verse_info(self):
         if len(self.verses) == 0:
@@ -52,7 +52,7 @@ class Sunday:
                 # Sanitize import GET request function
                 v_formal = v
                 bg_link = self.get_bg_link(verse=v)
-                san_v: object = v.replace(":", ".")
+                san_v = v.replace(":", ".")
                 get_parameters['passage'] = san_v
                 response = requests.get(url=BIBLE_URL, params=get_parameters)
                 soup = BeautifulSoup(response.content, "html.parser")

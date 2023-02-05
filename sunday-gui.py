@@ -1,9 +1,8 @@
-# imports and nescessar modules
+# imports and nescessary modules
 import tkinter as tk
 from tkinter import messagebox
 import random
 import pandas as pd
-import requests
 from sunday import Sunday
 from PIL import Image, ImageFont, ImageDraw
 from bs4 import BeautifulSoup
@@ -199,60 +198,25 @@ def exit_program():
 
 
 def process_data():
-    """sunday_info.get_verse_info()
+    """
+    sunday_info.get_verse_info()
+    for v in sunday_info.verse_data:
+        make_file(content=v["openlp"], name=v["verse_sanitized"])
     sunday_info.create_tags()
     create_thumbnail(sunday_info.other_date, sunday_info.date, sunday_info.sermon_title)
     wordpress_post(sunday_info.tags, get_template(WP_TEMPLATE))
     youtube_text(sunday_info, get_template(YT_POST))
-    yt_download_videos(sunday_info.yt_videos)"""
+    yt_download_videos(sunday_info.yt_videos)
     make_community_matters(sunday_info.community_matters)
+    """
+    exit_q = messagebox.askyesno("Alert",
+                                 "Your info was processed successfully.\nWould you like to exit?")
+    print(exit_q)
+    if exit_q:
+        window.destroy()
+
     # pprint.pprint(sunday_info.verse_data)
 
-
-    """
-    all_content = consolidate_info(weekly_info)
-    wordpress_post(all_content, get_template(WP_TEMPLATE))
-    youtube_text(all_content, get_template(YT_POST))
-    text_to_image(file_date=weekly_info['tag_date'], formal_date=weekly_info['proper_date'],
-                  title=weekly_info['sermon_title'])
-    with open(f'output/Worship for {weekly_info["tag_date"]}.txt', 'w') as worship_content:
-        worship_content.write(json.dumps(all_content, indent=2))
-    for video in weekly_info['w_videos']:
-        print(f'Trying to download {video["v_title"]}')
-        download(video["v_link"])
-"""
-
-"""
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
-
-
-def generate_password():
-    global password_characters
-    password_box.delete(0, 'end')
-    pd_file = ''
-    for _ in range(20):
-        new_char = random.choice(password_characters)
-        pd_file += new_char
-    password_box.insert(0, pd_file)
-
-# ---------------------------- SAVE PASSWORD ------------------------------- #
-
-
-def save_password():
-    w_site = website_box.get()
-    username = username_box.get()
-    password = password_box.get()
-    if w_site == "" or username == "" or password == '':
-        messagebox.showinfo(title="oops", message="You left a field empty.")
-    else:
-        is_ok = messagebox.askokcancel(title=w_site, message="Are you sure you want to continue?")
-        if is_ok:
-            for_file = w_site + " | " + username + " | " + password + "\n"
-            with open("passwords.txt", 'a') as date_file:
-                date_file.write(for_file)
-            website_box.delete(0, 'end')
-            password_box.delete(0, 'end')
-"""
 
 if __name__ == "__main__":
     # ---------------------------- UI SETUP ------------------------------- #
