@@ -1,4 +1,4 @@
-# imports and nescessary modules
+# import Modules
 import tkinter as tk
 from tkinter import messagebox
 import random
@@ -9,14 +9,31 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from pytube import YouTube
+from pathlib import Path
 import pprint
 
 WP_TEMPLATE = "wordpress_template.txt"
 YT_POST = "youtube_template.txt"
 COMMUNITY_MATTER = "community_matters.txt"
 LABEL_FONT = font=("Courier", 14, "bold")
+OUTPATH = "/Users/codymilliron/repos/sunday_post_automation/Resources"
+SUNDAY_PATH = '/Users/codymilliron/Documents/Reeds UMC Temp/Reeds Current Sunday'
+NEW_FOLDERS = ['01 - Notes',
+               "02 - Media",
+               "03 - Slides",
+               "04 - Other Files",
+               "05 - Library"]
 
 sunday_info = Sunday()
+
+
+def make_folders(date):
+    s = f"Worship - {date}"
+    current_sunday_path = Path(Path(SUNDAY_PATH) / s)
+    current_sunday_path.mkdir()
+    folder: str
+    for folder in NEW_FOLDERS:
+        Path(current_sunday_path / folder).mkdir()
 
 
 def make_community_matters(matters):
@@ -174,7 +191,7 @@ def add_community_matters():
     matter.insert(0, "Success! Add another.")
     # print(sunday_info.community_matters)
 
-
+"""
 def add_formal_date():
     sunday_info.date = date.get()
     date.delete(0, 'end')
@@ -186,7 +203,7 @@ def add_other_date():
     other_date.delete(0, 'end')
     other_date.insert(0, "Success!")
 
-
+"""
 def add_sermon_title():
     sunday_info.sermon_title = sermon_title.get()
     sermon_title.delete(0, 'end')
@@ -198,7 +215,7 @@ def exit_program():
 
 
 def process_data():
-    """
+    make_folders(sunday_info.other_date)
     sunday_info.get_verse_info()
     for v in sunday_info.verse_data:
         make_file(content=v["openlp"], name=v["verse_sanitized"])
@@ -208,7 +225,6 @@ def process_data():
     youtube_text(sunday_info, get_template(YT_POST))
     yt_download_videos(sunday_info.yt_videos)
     make_community_matters(sunday_info.community_matters)
-    """
     exit_q = messagebox.askyesno("Alert",
                                  "Your info was processed successfully.\nWould you like to exit?")
     print(exit_q)
@@ -275,9 +291,9 @@ if __name__ == "__main__":
     yt_video_link.insert(0, "Youtube Link")
 
     yt_video_button = tk.Button(text="Add", width=18, command=add_yt_video)
-    yt_video_button.grid(row=4, column=2)  # columnspan=2)
+    yt_video_button.grid(row=4, column=2)
 
-
+    """
     # --------------------------Sunday Date-----------------------------------#
 
     date_label = tk.Label(text='Formal Date:')
@@ -301,8 +317,9 @@ if __name__ == "__main__":
 
     other_date_button = tk.Button(text="Add", width=18, command=add_other_date)
     other_date_button.grid(row=6, column=2)
+    """
 
-    # ---------------------Sunday Date for files------------------------------#
+    # ---------------------Sermon Title------------------------------#
 
     sermon_title_label = tk.Label(text='Sermon Title:')
     sermon_title_label.grid(row=7, column=0, sticky="E")
@@ -314,7 +331,7 @@ if __name__ == "__main__":
     yt_link_button = tk.Button(text="Add", width=18, command=add_sermon_title)
     yt_link_button.grid(row=7, column=2)  # columnspan=2)
 
-    # ---------------------Community Matters------------------------------#
+# ---------------------Community Matters------------------------------#
 
     com_matters_title_label = tk.Label(text='Matters Title:')
     com_matters_title_label.grid(row=8, column=0, sticky="E")

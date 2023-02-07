@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import datetime
 
 BIBLE_URL = "http://bible.oremus.org/"
 get_parameters = {
@@ -16,6 +17,17 @@ class Sunday:
         self.community_matters = []
         self.yt_videos = []
         self.tags = {}
+        self.date, self.other_date = self.get_sunday_date()
+
+    @staticmethod
+    def get_sunday_date():
+        current_date = datetime.date.today()
+        while True:
+            day = current_date.weekday()
+            if day == 6:
+                break
+            current_date += datetime.timedelta(1)
+        return current_date.strftime("%B %d, %Y"), current_date.isoformat()
 
     @staticmethod
     def get_bg_link(verse):
