@@ -148,8 +148,8 @@ def wordpress_post(info, template):
     working_text = working_text.replace('<SERMON_TAG>', info['sermon_tag'])
     working_text = working_text.replace("<EVENT_TITLE>", info['event_title'])
     working_text = working_text.replace('<YOUTUBE_LINK>', info['youtube_link'])
-    working_text = working_text.replace('<BIBLE_LINK>', info['sermon_verse'])
-    working_text = working_text.replace('<BIBLE_VERSE>', info['sermon_verse_link'])
+    working_text = working_text.replace('<BIBLE_VERSE>', info['sermon_verse'])
+    working_text = working_text.replace('<BIBLE_LINK>', info['sermon_verse_link'])
     make_file(working_text, f'wordpress_{info["date_tag"]}')
 
 
@@ -204,6 +204,8 @@ def add_other_date():
     other_date.insert(0, "Success!")
 
 """
+
+
 def add_sermon_title():
     sunday_info.sermon_title = sermon_title.get()
     sermon_title.delete(0, 'end')
@@ -255,12 +257,12 @@ if __name__ == "__main__":
     verse_label.grid(row=1, column=0, sticky="E")
 
     verse = tk.Entry(width=35)
-    verse.grid(row=1, column=1, sticky="W") # , columnspan=2)
+    verse.grid(row=1, column=1, sticky="W")
     verse.insert(0, "Verse")
     verse.focus()
 
     verse_button = tk.Button(text="Add", width=18, command=add_verse)
-    verse_button.grid(row=1, column=2)  # columnspan=2)
+    verse_button.grid(row=1, column=2)
 
     # --------------------------Youtube Link-----------------------------------#
 
@@ -329,7 +331,7 @@ if __name__ == "__main__":
     sermon_title.insert(0, "Sermon Title")
 
     yt_link_button = tk.Button(text="Add", width=18, command=add_sermon_title)
-    yt_link_button.grid(row=7, column=2)  # columnspan=2)
+    yt_link_button.grid(row=7, column=2)
 
 # ---------------------Community Matters------------------------------#
 

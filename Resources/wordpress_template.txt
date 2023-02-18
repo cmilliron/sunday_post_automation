@@ -6,7 +6,9 @@
 
 <SERMON_TAG>
 
-<YOUTUBE_LINK>">
+<YOUTUBE_LINK>
+
+*********************************************************************
 
 [column width="1/1" last="true" title="<TITLE>" title_type="single" implicit="true"]
 

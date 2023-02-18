@@ -87,30 +87,3 @@ class Sunday:
                 # make_file(openlp, san_v)
 
                 #  return openlp
-
-
-"""
-    def verse_info(self):
-        
-        san_v = self.verses.replace(":", ".")
-        inquiry["passage"] = san_v
-        response = requests.get(url=BIBLE_URL, params=inquiry)
-        soup = BeautifulSoup(response.content, "html.parser")
-        passage = soup.find("div", {"class": "bibletext"})
-        verses = passage.find("p")
-        for v in verses("sup"):
-            v.decompose()
-            # verses_final.append(v)
-        verses_final = verses.text.splitlines()[1:]
-        # print(verses_final)
-        return self.convert_to_openlp(passage=verses_final, loc=f"{inquiry['passage']})
-        openlp = f"{inquiry['passage']}"
-        for v in verses_final:
-            if len(v) > 0:
-                openlp = openlp + "\n[===]\n" + v
-        make_file(openlp, san_v)
-        return openlp
-
-    def convert_to_openlp(self, passage, loc):
-        pass
-"""
