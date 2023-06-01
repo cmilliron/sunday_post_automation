@@ -2,8 +2,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import random
-import pandas as pd
-from sunday import Sunday
+# import pandas as pd
+import sunday
 from PIL import Image, ImageFont, ImageDraw
 from bs4 import BeautifulSoup
 import requests
@@ -16,15 +16,16 @@ WP_TEMPLATE = "wordpress_template.txt"
 YT_POST = "youtube_template.txt"
 COMMUNITY_MATTER = "community_matters.txt"
 LABEL_FONT = font=("Courier", 14, "bold")
-OUTPATH = "/Users/codymilliron/repos/sunday_post_automation/Resources"
-SUNDAY_PATH = '/Users/codymilliron/Documents/Reeds UMC Temp/Reeds Current Sunday'
+OUTPATH = r"C:\Users\cmill\development\sunday_post_automation\Resources"
+SUNDAY_PATH = r'C:\Users\cmill\OneDrive\Documents\Reeds UMC'
 NEW_FOLDERS = ['01 - Notes',
                "02 - Media",
                "03 - Slides",
                "04 - Other Files",
-               "05 - Library"]
+               "05 - Library",
+               "06 - Midi Files"]
 
-sunday_info = Sunday()
+sunday_info = sunday.Sunday()
 
 
 def make_folders(date):
@@ -46,14 +47,14 @@ def make_community_matters(matters):
             output_text = output_text + '<hr style="margin-top: 20px; margin-bottom: 20px" />\n'
             output_text = output_text + f'<h2 class="null" style="text-align: center; padding-bottom: 15px">{m["title"]}</h2>\n'
             output_text = output_text + f'<p>{m["matter"]}</p>\n'
-    make_file(output_text, f"Community Matters - {sunday_info.other_date}")
+    make_file(output_text, f"Community Matters - {sunday_info.other_date}", sunday_info.other_date)
 
 
 def download(link):
     yt = YouTube(link)
     yt_stream = yt.streams.get_highest_resolution()
     try:
-        yt_stream.download(output_path="output/")
+        yt_stream.download(output_path=f"{SUNDAY_PATH}/Worship - {sunday_info.other_date}/02 - Media/")
     except:
         print("There has been an error in downloading your youtube video")
     print("This download has completed! Yahooooo!")
@@ -98,14 +99,14 @@ def get_verse_content(v):
 
 
 # Receives text as and imput and a file name and writes tha text to a file.
-def make_file(content: object, name: object) -> object:
-    with open(f'output/{name}.txt', 'w') as file:
+def make_file(content: object, name: object, date: object ) -> object:
+    with open(f'{SUNDAY_PATH}/Worship - {date}/{NEW_FOLDERS[0]}/{name}.txt', 'w') as file:
         file.write(content)
 
 
 # Adds text to the templates.
 def create_thumbnail(file_date, formal_date, title):
-    outfile = f"output/Reeds Weekly Logo - {file_date}.jpg"
+    outfile = f"{SUNDAY_PATH}/Worship - {file_date}/02 - Media/Reeds Weekly Logo - {file_date}.jpg"
 
     # Image for the background
     my_image = Image.open("resources/images/Reeds Weekly Logo.jpg")
@@ -115,7 +116,7 @@ def create_thumbnail(file_date, formal_date, title):
     first_text = title
     second_text = f"Worship for {formal_date}"
     image_editable = ImageDraw.Draw(my_image)
-    image_editable.text((960, 920), first_text, font=title_font, align='center', fill="white", anchor='ms')
+    # image_editable.text((960, 920), first_text, font=title_font, align='center', fill="white", anchor='ms')
     image_editable.text((960, 1020), second_text, font=title_font, align='center', fill="white", anchor='ms')
     my_image.save(outfile, "JPEG")
 
@@ -135,7 +136,7 @@ def youtube_text(info, template):
     for v in info.yt_videos:
         vid_credit = vid_credit + " - ".join(v.values()) + "\n"
     working_text = working_text.replace('<YT_TAG>', vid_credit)
-    make_file(working_text, f'youtube_{info.tags["date_tag"]}')
+    make_file(working_text, f'youtube_{info.tags["date_tag"]}', sunday_info.other_date)
 
 
 # Takes Wordpress template and inserts relevant text
@@ -150,7 +151,7 @@ def wordpress_post(info, template):
     working_text = working_text.replace('<YOUTUBE_LINK>', info['youtube_link'])
     working_text = working_text.replace('<BIBLE_VERSE>', info['sermon_verse'])
     working_text = working_text.replace('<BIBLE_LINK>', info['sermon_verse_link'])
-    make_file(working_text, f'wordpress_{info["date_tag"]}')
+    make_file(working_text, f'wordpress_{info["date_tag"]}', sunday_info.other_date)
 
 
 # --------------------tkinter forms input ----------------------  #
@@ -220,12 +221,12 @@ def process_data():
     make_folders(sunday_info.other_date)
     sunday_info.get_verse_info()
     for v in sunday_info.verse_data:
-        make_file(content=v["openlp"], name=v["verse_sanitized"])
+        make_file(content=v["openlp"], name=v["verse_sanitized"], date=sunday_info.other_date)
     sunday_info.create_tags()
     create_thumbnail(sunday_info.other_date, sunday_info.date, sunday_info.sermon_title)
     wordpress_post(sunday_info.tags, get_template(WP_TEMPLATE))
     youtube_text(sunday_info, get_template(YT_POST))
-    yt_download_videos(sunday_info.yt_videos)
+    # yt_download_videos(sunday_info.yt_videos)
     make_community_matters(sunday_info.community_matters)
     exit_q = messagebox.askyesno("Alert",
                                  "Your info was processed successfully.\nWould you like to exit?")
